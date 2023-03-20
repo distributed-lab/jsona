@@ -64,11 +64,6 @@
     "build:esm": "tsc -p tsconfig.json --module esnext --outDir lib/esm",
     "build:cjs": "tsc -p tsconfig.json --module commonjs --outDir lib/cjs",
     "build:types": "tsc -p tsconfig.json --outDir lib/types --declaration --emitDeclarationOnly",
-    "compile": "./node_modules/.bin/tsc",
-    "precompile": "yarn clean",
-    "preversion": "yarn compile && yarn test",
-    "test-compile": "tsc --p tsconfig.test.json",
-    "test": "yarn test-compile && env NODE_ENV=test ts-mocha ./**/*.test.ts",
     "postbuild": "node ./scripts/postbuild.js"
   }
 }
