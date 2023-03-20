@@ -1,7 +1,7 @@
 {
-  "name": "jsona",
+  "name": "@distributedlab/jsona",
   "description": "Provide data formatters (data model builder & json builder) to work with JSON API specification v1.0 in your JavaScript / TypeScript code",
-  "version": "1.11.0",
+  "version": "1.13.0",
   "keywords": [
     "json-api",
     "jsonapi",
@@ -35,12 +35,17 @@
   "homepage": "https://github.com/olosegres/jsona#readme",
   "author": "Sergei Solo <olosegres@gmail.com>",
   "license": "MIT",
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
-  "files": [
-    "lib",
-    "src"
-  ],
+  "main": "./lib/cjs/index.js",
+  "module": "./lib/esm/index.js",
+  "types": "./lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "require": "./lib/cjs/index.js",
+      "import": "./lib/esm/index.js",
+      "default": "./lib/esm/index.js"
+    }
+  },
   "dependencies": {
     "tslib": "^2.4.1"
   },
@@ -55,10 +60,15 @@
   },
   "scripts": {
     "clean": "rm -rf ./lib/*",
+    "build": "yarn clean && yarn build:esm && yarn build:cjs && yarn build:types && yarn postbuild",
+    "build:esm": "tsc -p tsconfig.json --module esnext --outDir lib/esm",
+    "build:cjs": "tsc -p tsconfig.json --module commonjs --outDir lib/cjs",
+    "build:types": "tsc -p tsconfig.json --outDir lib/types --declaration --emitDeclarationOnly",
     "compile": "./node_modules/.bin/tsc",
-    "precompile": "npm run clean",
-    "preversion": "npm run compile && npm test",
+    "precompile": "yarn clean",
+    "preversion": "yarn compile && yarn test",
     "test-compile": "tsc --p tsconfig.test.json",
-    "test": "npm run test-compile && env NODE_ENV=test ts-mocha ./**/*.test.ts"
+    "test": "yarn test-compile && env NODE_ENV=test ts-mocha ./**/*.test.ts",
+    "postbuild": "node ./scripts/postbuild.js"
   }
 }
